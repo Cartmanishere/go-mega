@@ -360,3 +360,20 @@ func TestExportLink(t *testing.T) {
 		return err
 	})
 }
+
+func TestExportDir(t *testing.T) {
+	session := initSession(t)
+	node := createDir(t, session, "testdir1", session.FS.root)
+
+	// Don't include decryption key
+	retry(t, "Failed to export link (key not included)", func() error {
+		_, err := session.Link(node, false)
+		return err
+	})
+
+	// Do include decryption key
+	retry(t, "Failed to export link (key included)", func() error {
+		_, err := session.Link(node, true)
+		return err
+	})
+}
